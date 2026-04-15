@@ -92,6 +92,3 @@ with open(file_path, "w", encoding="utf-8") as f:
 
 print(f"Arquivo {file_path} gerado com sucesso.")
 ```
-
-Seu arquivo Markdown (v3) com as observações do XAMPP está pronto
-[file-tag: code-generated-file-STEPS-Quero-Cafe-v3.md]
