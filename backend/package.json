@@ -19,7 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource src/config/orm.config.ts",
     "make:migration": "yarn typeorm migration:generate",
-    "migrate": "yarn typeorm migration:run",
+    "migrate": "npm run typeorm migration:run",
     "migrate:rollback": "yarn typeorm migration:revert"
   },
   "dependencies": {
