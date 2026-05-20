@@ -69,7 +69,7 @@ Este projeto utiliza o MySQL/MariaDB. Siga as instruções abaixo para o **XAMPP
    * Execute primeiramente a criação de banco de dados:
 
    ```bash
-   npm run migration
+   npm run migrate
    ```
 
    * Após finalizar o comando acima, execute o comando para iniciar o backend:
