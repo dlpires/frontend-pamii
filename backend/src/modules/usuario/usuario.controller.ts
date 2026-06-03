@@ -1,6 +1,7 @@
 import { Controller, Param, Post, Body, Get, Patch, Delete, Query } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { IUsuarioOutput } from './interfaces/usuario.interface';
+import type { IUsuarioLoginInput } from './interfaces/usuario.interface';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { ListUsuarioDto } from './dto/list-usuario.dto';
@@ -36,8 +37,8 @@ export class UsuarioController {
     }
 
     @Post('login')
-    async login(usuario: string, senha: string): Promise<IUsuarioOutput> {
-        return await this.usuarioService.login(usuario, senha);
+    async login(@Body() loginDto: IUsuarioLoginInput): Promise<IUsuarioOutput> {
+        return await this.usuarioService.login(loginDto.usuario, loginDto.senha);
     }
 
     @Patch(':id')

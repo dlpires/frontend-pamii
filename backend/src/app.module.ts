@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './modules/auth/auth.module';
 import { ComandaModule } from './modules/comanda/comanda.module';
 import { MesaModule } from './modules/mesa/mesa.module';
 import { ProdutoModule } from './modules/produto/produto.module';
@@ -23,6 +24,7 @@ import ormConfig from './config/orm.config';
       }),
       inject: [ConfigService],
     }),
+    AuthModule,
     ComandaModule,
     MesaModule,
     ProdutoModule,
