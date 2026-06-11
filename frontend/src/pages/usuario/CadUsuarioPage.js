@@ -1,11 +1,17 @@
 import './CadUsuarioPage.css'
 import { createHeader } from '../../shared/Header.js'
 import { logout } from '../../shared/util.js';
+import { api } from '../../shared/api.js';
+import { isAuthenticated } from '../../shared/auth.js';
 
 const pageName = 'Cadastrar Usuario';
 
 class CadUsuarioPage extends HTMLElement {
     connectedCallback() {
+        if (!isAuthenticated()) {
+            document.querySelector('ion-router').push('/login', 'root');
+            return;
+        }
         this.classList.add('ion-page');
         const cabecalho = createHeader(pageName);
         this.innerHTML = `
@@ -46,11 +52,58 @@ class CadUsuarioPage extends HTMLElement {
                 </form>
             </ion-content>
         `;
-        this.querySelector('#logout-btn')
-        .addEventListener('click', logout);
-        this.querySelector('#btn-cancelar').addEventListener('click',
-            
-            () =>  windows.history.back());
+        const logoutBtn = this.querySelector('#logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', logout);
+        }
+
+        const form = this.querySelector('#form-usuario');
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                const payload = {
+                    nome: formData.get('nome'),
+                    usuario: formData.get('usuario'),
+                    senha: formData.get('senha'),
+                    perfil: parseInt(formData.get('perfil'))
+                };
+
+                const loading = document.createElement('ion-loading');
+                loading.message = 'Salvando usuário...';
+                document.body.appendChild(loading);
+                await loading.present();
+
+                try {
+                    await api.post('/usuario', payload);
+                    await loading.dismiss();
+                    this.toast('Usuário cadastrado com sucesso!', 'success');
+                    const router = document.querySelector('ion-router');
+                    if (router) {
+                        router.push('/usuario/list', 'forward');
+                    }
+                } catch (error) {
+                    await loading.dismiss();
+                    this.toast(error.message || 'Erro ao cadastrar usuário');
+                }
+            });
+        }
+
+        const btnCancelar = this.querySelector('#btn-cancelar');
+        if (btnCancelar) {
+            btnCancelar.addEventListener('click', () => window.history.back());
+        }
+    }
+
+    async toast(mensagem, color = 'danger') {
+        const toast = document.createElement('ion-toast');
+        toast.message = mensagem;
+        toast.color = color;
+        toast.duration = 2000;
+        toast.position = 'bottom';
+
+        document.body.appendChild(toast);
+        return toast.present();
     }
 }
 

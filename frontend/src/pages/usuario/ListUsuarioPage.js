@@ -2,6 +2,7 @@ import './ListUsuarioPage.css'
 import { createHeader } from '../../shared/Header.js'
 import { logout } from '../../shared/util.js';
 import { isAuthenticated } from '../../shared/auth.js';
+import { api } from '../../shared/api.js';
 
 const pageName = 'Usuário';
 
@@ -19,40 +20,27 @@ class ListUsuarioPage extends HTMLElement {
                 <div class="list-usuario"></div>
             </ion-content>
         `;
-        this.querySelector('#logout-btn')
-        .addEventListener('click', logout);
+        const logoutBtn = this.querySelector('#logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', logout);
+        }
 
          // buscando os usuarios
-        const usuarios = this.fetchUsuarios() || [];
-        
-        // renderizando os usuarios no HTML
-        this.renderUsuarios(usuarios);
+        this.loadUsuarios();
     }
 
-    fetchUsuarios() {
-        return [
-            {
-                "id": 1,
-                "nome": "Diego Pires",
-                "usuario": "diego.pires",
-                "senha": "123abc@",
-                "perfil": 1
-            },
-            {
-                "id": 2,
-                "nome": "João da Couves",
-                "usuario": "joao.couve",
-                "senha": "123abc@",
-                "perfil": 0
-            },
-            {
-                "id": 3,
-                "nome": "Fulano da Silva",
-                "usuario": "fulano.silva",
-                "senha": "123abc@",
-                "perfil": 0
-            }
-        ]
+    async loadUsuarios() {
+        try {
+            const usuarios = await this.fetchUsuarios();
+            this.renderUsuarios(usuarios);
+        } catch (error) {
+            console.error('Erro ao carregar usuários:', error);
+            this.renderUsuarios([]);
+        }
+    }
+
+    async fetchUsuarios() {
+        return await api.get('/usuario');
     }
 
     renderUsuarios(usuarios) {

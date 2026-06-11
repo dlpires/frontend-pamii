@@ -46,9 +46,14 @@ class EditUsuarioPage extends HTMLElement {
                 </form>
             </ion-content>
         `;
-        this.querySelector('#logout-btn')
-        .addEventListener('click', logout);
-        this.querySelector('#btn-cancelar').addEventListener('click', () =>  windows.history.back());
+        const logoutBtn = this.querySelector('#logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', logout);
+        }
+        const btnCancelar = this.querySelector('#btn-cancelar');
+        if (btnCancelar) {
+            btnCancelar.addEventListener('click', () => window.history.back());
+        }
     }
 }
 

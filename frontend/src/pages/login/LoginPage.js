@@ -42,28 +42,33 @@ class LoginPage extends HTMLElement {
         const userInput = this.querySelector('#usuario');
         const passInput = this.querySelector('#senha');
         const btnLogin = this.querySelector('#login');
-
-        btnLogin.addEventListener('click', async () => {
-            const usuario = userInput.value;
-            const senha = passInput.value;
-
-            const loading = document.createElement('ion-loading');
-            loading.message = 'Autenticando...';
-            loading.duration = 3000;
-
-            document.body.appendChild(loading);
-            await loading.present();
-            await loading.onDidDismiss();
-
-            try {
-                const response = await api.post('/auth/login', { usuario, senha });
-                authLogin(response.access_token, response.user);
-                toast('Login realizado com sucesso!', 'success');
-                document.querySelector('ion-router').push('/home', 'forward');
-            } catch (error) {
-                toast('Usuário ou senha incorretos!');
-            }
-        })
+ 
+        if (btnLogin && userInput && passInput) {
+            btnLogin.addEventListener('click', async () => {
+                const usuario = userInput.value;
+                const senha = passInput.value;
+ 
+                const loading = document.createElement('ion-loading');
+                loading.message = 'Autenticando...';
+                loading.duration = 3000;
+ 
+                document.body.appendChild(loading);
+                await loading.present();
+                await loading.onDidDismiss();
+ 
+                try {
+                    const response = await api.post('/auth/login', { usuario, senha });
+                    authLogin(response.access_token, response.user);
+                    toast('Login realizado com sucesso!', 'success');
+                    const router = document.querySelector('ion-router');
+                    if (router) {
+                        router.push('/home', 'forward');
+                    }
+                } catch (error) {
+                    toast('Usuário ou senha incorretos!');
+                }
+            })
+        }
 
         async function toast(mensagem, color = 'danger') {
             const toast = document.createElement('ion-toast');

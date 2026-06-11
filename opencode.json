@@ -3,5 +3,13 @@
     "instructions": ["backend/AGENTS.md", "frontend/AGENTS.md", "AGENTS.md"],
     "permission": {
         "bash": "ask"
+    },
+    "agent": {
+        "plan": {
+            "model": "google/gemini-2.5-flash"
+        },
+        "build": {
+            "model": "opencode/big-pickle"
+        }
     }
 }
