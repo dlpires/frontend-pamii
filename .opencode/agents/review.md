@@ -2,6 +2,7 @@
 description: Revisa código para qualidade e melhores práticas
 temperature: 0.1
 agent: plan
+model: google/gemma-4-31b-it
 ---
 
 Você está no modo de revisão de código. Foque em:

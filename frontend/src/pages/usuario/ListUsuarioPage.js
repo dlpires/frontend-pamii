@@ -18,11 +18,23 @@ class ListUsuarioPage extends HTMLElement {
             ${cabecalho}
             <ion-content>
                 <div class="list-usuario"></div>
+                <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+                    <ion-fab-button id="btn-add-usuario">
+                        <ion-icon name="add"></ion-icon>
+                    </ion-fab-button>
+                </ion-fab>
             </ion-content>
         `;
         const logoutBtn = this.querySelector('#logout-btn');
         if (logoutBtn) {
             logoutBtn.addEventListener('click', logout);
+        }
+
+        const btnAdd = this.querySelector('#btn-add-usuario');
+        if (btnAdd) {
+            btnAdd.addEventListener('click', () => {
+                document.querySelector('ion-router').push('/usuario/create', 'forward');
+            });
         }
 
          // buscando os usuarios
@@ -78,6 +90,59 @@ class ListUsuarioPage extends HTMLElement {
             `).join('');
     
         container.innerHTML = `<ion-list>${usuarioItems}</ion-list>`;
+
+        // Listeners para editar e deletar
+        this.querySelector('.list-usuario').querySelectorAll('.btn-edit').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = btn.dataset.id;
+                localStorage.setItem('usuarioId', id);
+                document.querySelector('ion-router').push('/usuario/edit', 'forward');
+            });
+        });
+
+        this.querySelector('.list-usuario').querySelectorAll('.btn-delete').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const id = btn.dataset.id;
+                await this.confirmDelete(id);
+            });
+        });
+    }
+
+    async confirmDelete(id) {
+        const alert = document.createElement('ion-alert');
+        alert.header = 'Confirmar Exclusão';
+        alert.message = 'Tem certeza que deseja excluir este usuário?';
+        alert.buttons = [
+            {
+                text: 'Cancelar',
+                role: 'cancel'
+            },
+            {
+                text: 'Excluir',
+                handler: async () => {
+                    try {
+                        await api.delete('/usuario/' + id);
+                        this.toast('Usuário excluído com sucesso!', 'success');
+                        this.loadUsuarios();
+                    } catch (error) {
+                        this.toast(error.message || 'Erro ao excluir usuário');
+                    }
+                }
+            }
+        ];
+        document.body.appendChild(alert);
+        await alert.present();
+    }
+
+    async toast(mensagem, color = 'danger') {
+        const toast = document.createElement('ion-toast');
+        toast.message = mensagem;
+        toast.color = color;
+        toast.duration = 2000;
+        toast.position = 'bottom';
+
+        document.body.appendChild(toast);
+        return toast.present();
     }
 }
 

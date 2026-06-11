@@ -6,7 +6,7 @@
     },
     "agent": {
         "plan": {
-            "model": "google/gemini-2.5-flash"
+            "model": "google/gemma-4-31b-it"
         },
         "build": {
             "model": "opencode/big-pickle"
