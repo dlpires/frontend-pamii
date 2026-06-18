@@ -22,8 +22,8 @@ export class UsuarioController {
     }
 
     @Get(':id')
-    async findOne(@Param('id') id: number): Promise<IUsuarioOutput> {
-        return await this.usuarioService.findOne(id);
+    async findOne(@Param('id') id: string): Promise<IUsuarioOutput> {
+        return await this.usuarioService.findOne(Number(id));
     }
 
     @Get('usuario/:usuario')
@@ -42,12 +42,12 @@ export class UsuarioController {
     }
 
     @Patch(':id')
-    async update(@Param('id') id: number, @Body() updateUsuarioDto: UpdateUsuarioDto): Promise<IUsuarioOutput> {
-        return await this.usuarioService.update(id, updateUsuarioDto);
+    async update(@Param('id') id: string, @Body() updateUsuarioDto: UpdateUsuarioDto): Promise<IUsuarioOutput> {
+        return await this.usuarioService.update(Number(id), updateUsuarioDto);
     }
 
     @Delete(':id')
-    async remove(@Param('id') id: number): Promise<DeleteUsuarioDto> {
-        return await this.usuarioService.remove(id);
+    async remove(@Param('id') id: string): Promise<DeleteUsuarioDto> {
+        return await this.usuarioService.remove(Number(id));
     }
 }

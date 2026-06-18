@@ -118,10 +118,20 @@ class EditUsuarioPage extends HTMLElement {
 
     populateForm(usuario) {
         const form = this.querySelector('#form-usuario');
-        form.elements['nome'].value = usuario.nome;
-        form.elements['usuario'].value = usuario.usuario;
-        form.elements['senha'].value = usuario.senha;
-        form.elements['perfil'].value = usuario.perfil;
+        
+        const setFieldValue = (name, value) => {
+            const field = form.elements[name];
+            if (field) {
+                field.value = value;
+                field.dispatchEvent(new Event('ionInput'));
+                field.dispatchEvent(new Event('input'));
+            }
+        };
+
+        setFieldValue('nome', usuario.nome);
+        setFieldValue('usuario', usuario.usuario);
+        setFieldValue('senha', usuario.senha);
+        setFieldValue('perfil', usuario.perfil?.toString());
     }
 
     async toast(mensagem, color = 'danger') {
